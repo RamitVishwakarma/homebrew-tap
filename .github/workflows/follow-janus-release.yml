@@ -1,0 +1,55 @@
+name: Follow the latest Janus release
+
+# Keeps Casks/janus.rb pointing at the newest Janus release without any secret.
+# The tap updates itself with the built-in GITHUB_TOKEN, so nothing has to be
+# configured in the Janus repository for this to work.
+
+on:
+  schedule:
+    - cron: "17 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    name: Bump the cask if a newer release exists
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Rewrite the version and the checksum
+        run: |
+          set -euo pipefail
+
+          tag=$(curl -fsSL -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/RamitVishwakarma/Janus/releases/latest \
+            | jq -r .tag_name)
+          version="${tag#v}"
+          test -n "${version}"
+
+          # The checksum comes from the release's own SHA256SUMS.txt rather than
+          # being recomputed, so the cask agrees with what the release published.
+          sha=$(curl -fsSL \
+            "https://github.com/RamitVishwakarma/Janus/releases/download/${tag}/SHA256SUMS.txt" \
+            | awk -v want="Janus-${version}.zip" '$2 == want || $2 == "*" want { print $1 }')
+          test -n "${sha}"
+
+          sed -i -E "s/^  version \".*\"$/  version \"${version}\"/" Casks/janus.rb
+          sed -i -E "s/^  sha256 \".*\"$/  sha256 \"${sha}\"/" Casks/janus.rb
+          grep -q "version \"${version}\"" Casks/janus.rb
+          grep -q "sha256 \"${sha}\"" Casks/janus.rb
+
+          echo "VERSION=${version}" >> "${GITHUB_ENV}"
+
+      - name: Commit and push
+        run: |
+          if git diff --quiet; then
+            echo "::notice::The cask already points at ${VERSION}."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Janus ${VERSION}"
+          git push
