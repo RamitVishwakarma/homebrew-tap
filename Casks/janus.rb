@@ -4,7 +4,7 @@ cask "janus" do
 
   url "https://github.com/RamitVishwakarma/Janus/releases/download/v#{version}/Janus-#{version}.zip"
   name "Janus"
-  desc "Switch Claude Code accounts and clear developer caches from the menu bar"
+  desc "Switch Claude Code and Codex accounts, and clear developer caches"
   homepage "https://github.com/RamitVishwakarma/Janus"
 
   depends_on macos: :ventura
