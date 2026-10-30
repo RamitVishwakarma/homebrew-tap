@@ -4,8 +4,8 @@ Homebrew casks for my macOS apps.
 
 ## Janus
 
-[Janus](https://github.com/RamitVishwakarma/Janus) switches Claude Code accounts
-and clears developer caches from the menu bar.
+[Janus](https://github.com/RamitVishwakarma/Janus) switches Claude Code and Codex
+accounts from the menu bar.
 
 ```sh
 brew install --cask --no-quarantine ramitvishwakarma/tap/janus
