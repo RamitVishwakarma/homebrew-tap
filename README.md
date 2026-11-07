@@ -8,13 +8,13 @@ Homebrew casks for my macOS apps.
 accounts from the menu bar.
 
 ```sh
-brew install --cask --no-quarantine ramitvishwakarma/tap/janus
+brew install --cask ramitvishwakarma/tap/janus
 ```
 
 I sign Janus ad-hoc rather than with a paid Apple Developer certificate. macOS
-puts a quarantine flag on anything signed that way and refuses to open it the
-first time, so `--no-quarantine` tells Homebrew to skip the flag. Leave the
-option off and you clear the flag yourself:
+puts a quarantine flag on anything signed that way and refuses to open it, so
+the cask clears the flag once the app is installed. If Janus still will not
+open, clear it yourself:
 
 ```sh
 xattr -dr com.apple.quarantine /Applications/Janus.app

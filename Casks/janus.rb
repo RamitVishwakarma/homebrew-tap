@@ -11,6 +11,12 @@ cask "janus" do
 
   app "Janus.app"
 
+  # Janus is signed ad-hoc, not notarised, so macOS refuses to open it while the
+  # quarantine flag is set. Homebrew dropped --no-quarantine, so clear it here.
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Janus.app"]
+  end
+
   zap trash: [
     "~/Library/Application Support/Janus",
     "~/Library/Preferences/com.ramitvishwakarma.janus.plist",
