@@ -1,6 +1,6 @@
 cask "janus" do
-  version "2.0.0"
-  sha256 "ec99b98425c01d9031637d0e224a474195b414736f657e8bf624c13cef255602"
+  version "2.1.0"
+  sha256 "bd75c5786a16fb2df66aad461f526a24084a23241df79a241e561de9e38d155d"
 
   url "https://github.com/RamitVishwakarma/Janus/releases/download/v#{version}/Janus-#{version}.zip"
   name "Janus"
